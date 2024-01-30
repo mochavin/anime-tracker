@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}  >
+      <body className={inter.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -29,7 +29,7 @@ export default function RootLayout({
           <PageHeader />
           <main className="p-4">
             {children}
-            <Toaster />
+            <Toaster position="top-center" />
           </main>
         </ThemeProvider>
       </body>

@@ -17,10 +17,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { Combobox } from "./combo-box"
 import { useState } from "react"
+import useStore from "@/app/store/useStore"
+import { useAnimeStore } from "@/app/store/useAnimeStore"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   anime: z.string().min(0, {
-    message: "anime name must be at least 2 characters.",
+    message: "Choose an anime.",
   }),
   season: z.string().min(1, {
     message: "season must be at least 1 characters.",
@@ -28,27 +31,31 @@ const formSchema = z.object({
   episode: z.string().min(1, {
     message: "episode must be at least 1 characters.",
   }),
+  isFinished: z.boolean(),
 })
 
 export default function AddForm() {
   const [value, setValue] = useState("");
+  const addAnime = useAnimeStore((state: any) => state.addAnime)
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       anime: "",
       season: '1',
       episode: '1',
+      isFinished: false,
     },
   })
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     values.anime = value
-    console.log(values)
+    addAnime(values)
+    form.reset()
+    toast("anime added", {
+      description: "a new anime has been added!",
+      invert: true,
+    })
   }
 
   return (
