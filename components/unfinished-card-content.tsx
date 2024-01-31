@@ -3,12 +3,15 @@ import useStore from "@/app/store/useStore"
 import { Button } from "./ui/button"
 import { toast } from "sonner"
 import { EditDrawer } from "./edit-drawer"
+import { useSearchParams } from "next/navigation"
+import { RemoveDialog } from "./remove-dialog"
 
 export default function UnfinishedCardContent() {
-  const listAnime = useStore(useAnimeStore, (state: any) => state.animeList)
+  let listAnime = useStore(useAnimeStore, (state: any) => state.animeList)
+  const searchParams = useSearchParams()
   if (!listAnime) return (<div>loading...</div>)
+  const animeList = listAnime.filter((anime: any) => !anime.isFinished && anime.anime.toLowerCase().includes(searchParams.get('search')?.toLowerCase()))
 
-  const animeList = listAnime.filter((anime: any) => !anime.isFinished)
   return (
     <div className="gap-8 flex flex-col">
       {animeList.map((anime: any, index: number) => (
@@ -21,13 +24,7 @@ export default function UnfinishedCardContent() {
 }
 
 function CardContent({ anime }: any) {
-  const removeAnime = useAnimeStore((state: any) => state.removeAnime)
   const toggleStateFinished = useAnimeStore((state: any) => state.toggleStateFinished)
-
-  function handleRemove() {
-    removeAnime(anime)
-    toast(anime.anime + " removed")
-  }
 
   function handleFinished() {
     toggleStateFinished(anime)
@@ -47,12 +44,8 @@ function CardContent({ anime }: any) {
         <Button size="sm" onClick={handleFinished}>
           Finished
         </Button>
-        {/* <Button variant="outline" size="sm"> */}
-          <EditDrawer anime={anime} />
-        {/* </Button> */}
-        <Button variant="destructive" size="sm" onClick={handleRemove}>
-          <img src="./icons/trash.svg" alt="trash" className="w-4 h-4" />
-        </Button>
+        <EditDrawer anime={anime} />
+        <RemoveDialog anime={anime} />
       </div>
     </div>
   )
