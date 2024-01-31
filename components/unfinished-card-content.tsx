@@ -9,8 +9,14 @@ import { RemoveDialog } from "./remove-dialog"
 export default function UnfinishedCardContent() {
   let listAnime = useStore(useAnimeStore, (state: any) => state.animeList)
   const searchParams = useSearchParams()
+
   if (!listAnime) return (<div>loading...</div>)
-  const animeList = listAnime.filter((anime: any) => !anime.isFinished && anime.anime.toLowerCase().includes(searchParams.get('search')?.toLowerCase()))
+
+  const animeList = listAnime.filter((anime: any) => {
+    const searchTerm = searchParams.get('search')?.toLowerCase();
+    return !anime.isFinished && (!searchTerm || anime.anime.toLowerCase().includes(searchTerm));
+  })
+
 
   return (
     <div className="gap-8 flex flex-col">
