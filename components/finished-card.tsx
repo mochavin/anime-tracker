@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import FinishedCardContent from "./finished-card-content";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
@@ -8,7 +9,9 @@ export default function FinishedCard() {
         <CardTitle>Finished Anime</CardTitle>
       </CardHeader>
       <CardContent>
-        <FinishedCardContent />
+        <Suspense fallback={<h1>Loading...</h1>}>
+          <FinishedCardContent />
+        </Suspense>
       </CardContent>
     </Card>
   )
