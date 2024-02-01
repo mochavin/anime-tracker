@@ -11,9 +11,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
+import { AnimeType } from "@/lib/type"
 import { toast } from "sonner"
 
-export function RemoveDialog({ anime }: any) {
+export function RemoveDialog({ anime }: { anime: AnimeType }) {
   const removeAnime = useAnimeStore((state: any) => state.removeAnime)
   function handleRemove() {
     removeAnime(anime)

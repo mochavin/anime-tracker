@@ -1,40 +1,48 @@
 import { useAnimeStore } from "@/app/store/useAnimeStore"
 import useStore from "@/app/store/useStore"
-import { Button } from "./ui/button"
-import { toast } from "sonner"
-import { EditDrawer } from "./edit-drawer"
 import { useSearchParams } from "next/navigation"
+import { toast } from "sonner"
+import { Button } from "./ui/button"
 import { RemoveDialog } from "./remove-dialog"
+import { EditDrawer } from "./edit-drawer"
+import { AnimeType } from "@/lib/type"
 
-export default function UnfinishedCardContent() {
+export default function MyCardContent({
+  type,
+}: {
+  type: string
+}) {
   let listAnime = useStore(useAnimeStore, (state: any) => state.animeList)
   const searchParams = useSearchParams()
 
   if (!listAnime) return (<div>loading...</div>)
 
-  const animeList = listAnime.filter((anime: any) => {
-    const searchTerm = searchParams.get('search')?.toLowerCase();
-    return !anime.isFinished && (!searchTerm || anime.anime.toLowerCase().includes(searchTerm));
+  const animeList = listAnime.filter((anime: AnimeType) => {
+    let searchTerm = searchParams.get('search')?.toLowerCase();
+    const isUnfinishedType = type === "unfinished";
+    return (isUnfinishedType && !anime.isFinished || !isUnfinishedType && anime.isFinished) &&
+      (!searchTerm || anime.anime.toLowerCase().includes(searchTerm));
   })
 
+  if (animeList.length === 0) return (<div>no anime found</div>)
 
   return (
     <div className="gap-8 flex flex-col">
-      {animeList.map((anime: any, index: number) => (
+      {animeList.map((anime: AnimeType, index: number) => (
         <div key={index}>
-          <CardContent anime={anime} />
+          <ContentDetailed anime={anime} />
         </div>
       ))}
     </div>
   )
 }
 
-function CardContent({ anime }: any) {
+function ContentDetailed({ anime }: { anime: AnimeType }) {
   const toggleStateFinished = useAnimeStore((state: any) => state.toggleStateFinished)
 
-  function handleFinished() {
+  function handleClick() {
+    toast(anime.anime + " " + (!anime.isFinished ? "finished" : "unfinished"))
     toggleStateFinished(anime)
-    toast(anime.anime + " finished")
   }
 
   return (
@@ -47,10 +55,12 @@ function CardContent({ anime }: any) {
         </div>
       </div>
       <div className="flex gap-1">
-        <Button size="sm" onClick={handleFinished}>
-          Finished
+        <Button size="sm" onClick={handleClick}>
+          {anime.isFinished ? "unfinished" : "finished"}
         </Button>
-        <EditDrawer anime={anime} />
+        {!anime.isFinished && (
+          <EditDrawer anime={anime} />
+        )}
         <RemoveDialog anime={anime} />
       </div>
     </div>

@@ -24,8 +24,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useAnimeStore } from "@/app/store/useAnimeStore"
 import { toast } from "sonner"
+import { AnimeType } from "@/lib/type"
 
-export function EditDrawer({ anime }: any) {
+export function EditDrawer({ anime }: { anime: AnimeType }) {
   const [open, setOpen] = React.useState(false)
   const [season, setSeason] = React.useState(anime.season)
   const [episode, setEpisode] = React.useState(anime.episode)
@@ -62,7 +63,14 @@ export function EditDrawer({ anime }: any) {
   )
 }
 
-function EditForm({ className, anime, setSeason, setEpisode }: any) {
+function EditForm(
+  { className, anime, setSeason, setEpisode }
+    : {
+      className?: string
+      anime: AnimeType
+      setSeason: React.Dispatch<React.SetStateAction<string>>
+      setEpisode: React.Dispatch<React.SetStateAction<string>>
+    }) {
 
   return (
     <form className={cn("grid items-start gap-4", className)}>

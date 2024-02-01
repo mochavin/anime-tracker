@@ -1,8 +1,12 @@
-import { Suspense } from "react";
-import FinishedCardContent from "./finished-card-content";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Suspense } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
+import MyCardContent from "./my-card-content"
 
-export default function FinishedCard() {
+export default function AllCard({
+  type,
+}: {
+  type: string
+}) {
   return (
     <Card className="w-[350px]">
       <CardHeader>
@@ -10,7 +14,7 @@ export default function FinishedCard() {
       </CardHeader>
       <CardContent>
         <Suspense fallback={<h1>Loading...</h1>}>
-          <FinishedCardContent />
+          <MyCardContent type={type} />
         </Suspense>
       </CardContent>
     </Card>

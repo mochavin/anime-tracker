@@ -1,9 +1,8 @@
 'use client'
 import { Suspense } from "react";
-import FinishedCard from "@/components/finished-card";
 import { FormCard } from "@/components/form-card";
-import UnfinishedCard from "@/components/unfinished-card";
 import SearchBar from "@/components/search-bar";
+import AllCard from "@/components/all-card";
 
 export default function Home() {
   return (
@@ -14,8 +13,8 @@ export default function Home() {
         </Suspense>
         <FormCard />
       </div>
-      <UnfinishedCard />
-      <FinishedCard />
+      <AllCard type="unfinished" />
+      <AllCard type="finished" />
     </main>
   );
 }
