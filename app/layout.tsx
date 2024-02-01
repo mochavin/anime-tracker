@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import PageHeader from "@/components/page-header";
 import { Toaster } from "@/components/ui/sonner";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,11 +28,12 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <PageHeader />
-          <main className="p-4">
+          <main className="p-4 min-h-[480px]">
             {children}
             <Toaster position="top-center" />
           </main>
         </ThemeProvider>
+        <Footer />
       </body>
     </html>
   );
